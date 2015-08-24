@@ -1,0 +1,21 @@
+xrandr --listproviders
+Providers: number : 2
+Provider 0: id: 0x79 cap: 0x9, Source Output, Sink Offload crtcs: 4 outputs: 9 associated providers: 1 name:Intel
+Provider 1: id: 0x41 cap: 0x2, Sink Output crtcs: 1 outputs: 1 associated providers: 1 name:modesetting
+
+xrandr --setprovideroutputsource 1 0
+
+TL;DR : The recently unveiled X Server driver xf86-video-modesetting can be used with the udl KMS-driver;
+pacman -S xf86-video-modesetting
+
+https://bbs.archlinux.org/viewtopic.php?id=164385
+https://aur.archlinux.org/packages/xf86-video-displaylink/
+https://bbs.archlinux.org/viewtopic.php?id=134152
+
+
+[Desktop Entry]
+Type=Application
+Name=LXRandR autostart
+Comment=Start xrandr with settings done in LXRandR
+Exec=sh -c 'xrandr --output DVI-1-0 --mode 1680x1050 --rate 59.88 --left-of LVDS1 --output HDMI1 --mode 1920x1080 --rate 60.00 --left-of LVDS1 --output LVDS1 --mode 1280x800 --rate 60.22'
+OnlyShowIn=LXDE

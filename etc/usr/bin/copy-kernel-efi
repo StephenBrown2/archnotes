@@ -1,0 +1,4 @@
+#!/bin/bash
+mkdir /boot/efi/$(date +%F)
+cp -f /boot/efi/{vmlinuz*,initramfs*} /boot/efi/$(date +%F)
+cp -f /boot/{vmlinuz*,initramfs*} /boot/efi

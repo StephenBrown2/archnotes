@@ -1,0 +1,11 @@
+[Unit]
+Description=Copy-Kernel
+Before=shutdown.target reboot.target halt.target
+DefaultDependencies=no
+
+[Service]
+ExecStart=/usr/bin/copy-kernel-efi
+Type=oneshot
+
+[Install]
+WantedBy=shutdown.target
