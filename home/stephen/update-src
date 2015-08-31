@@ -1,0 +1,45 @@
+#!/bin/bash
+
+check_email() {
+if [ ! -z "$1" ]; then cd $1; fi
+echo Checking email address
+ISGIT=$(git rev-parse --is-inside-work-tree 2>/dev/null)
+REMOTE=$(git remote -v)
+EMAIL=$(git config user.email)
+if [[ "x${ISGIT}" = "xtrue" ]]; then
+    echo Is git? $ISGIT
+    if [[ ${REMOTE} =~ rack(git|space) ]]; then
+        echo Remote: $REMOTE
+        if ! [[ ${EMAIL} =~ rackspace ]]; then
+            echo Email: $EMAIL is broke
+            git config user.email 'stephen.brownii@rackspace.com'
+            echo 'Fixed'
+        fi
+    fi
+fi
+echo 'Good!'
+}
+
+cd ~/src;
+dirs=${@:-$(ls -d */ | tr -d '/')}
+echo $dirs
+
+for d in ${dirs[@]}; do
+  cd $d;
+  echo "Checking $(pwd)";
+  if [[ $( [ -d .git ] && git remote update > /dev/null && git status -uno | grep -c fast-forward) -ge 1 ]]; then
+    check_email
+    echo "Git status"
+    git status -sb;
+    echo "Git pull"
+    git pull;
+    if [ -f setup.py ]; then
+      echo "Python install"
+      sudo python setup.py install;
+      echo "Git clean"
+      sudo git clean -df;
+    fi;
+    echo;
+  fi;
+  cd - >/dev/null;
+done
